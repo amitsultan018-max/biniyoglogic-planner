@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="theme-color" content="#534AB7"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="BiniyogLogic"/>
+<link rel="manifest" href="manifest.json"/>
+<title>BINIYOGLOGIC Planner</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f3ff;color:#1a1a2e;min-height:100vh;padding-bottom:80px}
+/* Header */
+.header{background:linear-gradient(135deg,#534AB7,#185FA5,#0F6E56);padding:16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(83,74,183,0.3)}
+.header-title{color:#fff;font-size:18px;font-weight:700}
+.header-sub{color:rgba(255,255,255,0.75);font-size:11px;margin-top:2px}
+.send-btn{background:#fff;color:#534AB7;border:none;border-radius:20px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px}
+.metric-card{border-radius:12px;padding:12px 14px;border-left:4px solid}
+.metric-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.metric-value{font-size:28px;font-weight:700}
+/* Tabs */
+.tabs{display:flex;gap:6px;padding:0 14px 10px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+/* Content */
+.content{padding:0 14px}
+/* Status badge */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid;letter-spacing:0.3px}
+/* Video card */
+.video-card{background:#fff;border-radius:12px;padding:12px;margin-bottom:8px;border-left:4px solid;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.video-card input,.video-card select{width:100%;border:1px solid #e0dff5;border-radius:8px;padding:7px 10px;font-size:13px;margin-top:6px;background:#fafafa;outline:none}
+.video-card input:focus,.video-card select:focus{border-color:#534AB7}
+/* Script bar */
+.script-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.script-row input[type=range]{flex:1}
+.script-pct{font-size:12px;font-weight:700;min-width:32px;text-align:right}
+/* Batch card */
+.batch-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;border-top:4px solid;box-shadow:0 1px 6px rgba(0,0,0,0.07)}
+.batch-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.progress-bar{height:6px;background:#eee;border-radius:4px;margin-bottom:12px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.3s}
+/* Calendar row */
+.cal-row{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:7px;border-left:5px solid;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.cal-date{font-size:12px;font-weight:700;color:#185FA5}
+.cal-title{font-size:13px;font-weight:500}
+/* Performance table wrapper */
+.perf-scroll{overflow-x:auto;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.perf-table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px}
+.perf-table thead tr{background:#534AB7}
+.perf-table thead th{padding:9px 10px;color:#fff;font-weight:700;text-align:left}
+.perf-table tbody tr:nth-child(even){background:#f8f7ff}
+.perf-table tbody tr:nth-child(odd){background:#fff}
+.perf-table td{padding:8px 10px;border-bottom:0.5px solid #ebebeb}
+.perf-table input{border:1px solid #e0dff5;border-radius:6px;padding:4px 6px;font-size:11px;width:80px;background:#fafafa}
+/* Viral topics */
+.viral-card{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;border-left:5px solid;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;flex-direction:column;gap:6px}
+.viral-title{font-size:13px;font-weight:700}
+.viral-reason{font-size:11px;color:#666;font-style:italic}
+.viral-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+/* Buttons */
+.add-btn{display:inline-block;border:none;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px}
+.del-btn{background:transparent;border:1px solid #D85A30;color:#D85A30;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #e0dff5;display:flex;z-index:100;box-shadow:0 -2px 12px rgba(0,0,0,0.08)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0;background:transparent;border:none;cursor:pointer;font-size:9px;font-weight:600;color:#888;gap:3px}
+.nav-btn.active{color:#534AB7}
+.nav-btn .nav-icon{font-size:20px}
+/* Email status */
+.email-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin-top:4px}
+/* Section title */
+.section-title{font-size:11px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;margin-top:4px}
+/* Input row */
+.input-row{display:flex;gap:8px;margin-top:8px}
+.input-row input{flex:1;border:1px solid #e0dff5;border-radius:8px;padding:7px 10px;font-size:13px;background:#fff;outline:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">📹 BINIYOGLOGIC</div>
+    <div class="header-sub">Content Planner · @BINIYOGLOGIC</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+    <button class="send-btn" onclick="sendEmail()">📧 Send Plan</button>
+    <div id="emailStatus" class="email-status" style="display:none"></div>
+  </div>
+</div>
+
+<div class="metrics" id="metrics"></div>
+<div class="tabs" id="tabs"></div>
+<div class="content" id="content"></div>
+
+<div class="bottom-nav" id="bottomNav"></div>
+
+<script>
+const RECIPIENT = "mnahidakhanam@gmail.com";
+const STATUS_OPTIONS = ["Idea","Scripting","Recorded","Edited","Scheduled","Published"];
+const STATUS_STYLES = {
+  Idea:      {bg:"#FAEEDA",color:"#854F0B",border:"#EF9F27"},
+  Scripting: {bg:"#E6F1FB",color:"#185FA5",border:"#378ADD"},
+  Recorded:  {bg:"#EEEDFE",color:"#534AB7",border:"#7F77DD"},
+  Edited:    {bg:"#FBEAF0",color:"#993556",border:"#D4537E"},
+  Scheduled: {bg:"#E1F5EE",color:"#0F6E56",border:"#1D9E75"},
+  Published: {bg:"#EAF3DE",color:"#3B6D11",border:"#639922"},
+};
+const BATCH_COLORS = ["#534AB7","#185FA5","#0F6E56","#993556","#D85A30","#854F0B"];
+const TAB_COLORS   = ["#534AB7","#185FA5","#0F6E56","#993556","#D85A30"];
+const VIRAL = [
+  {title:"বাজেট ২০২৫-২৬: শেয়ার বাজারে কী প্রভাব পড়বে?",reason:"Post-budget analysis trending",tag:"Budget",color:"#854F0B",bg:"#FAEEDA"},
+  {title:"DSE-তে PE Ratio কম থাকলে কি এখনই কিনবেন?",reason:"DSE valuation debates viral",tag:"DSE",color:"#185FA5",bg:"#E6F1FB"},
+  {title:"FDR নাকি শেয়ার? কোথায় রাখবেন আপনার সঞ্চয়?",reason:"High search volume comparison",tag:"Compare",color:"#534AB7",bg:"#EEEDFE"},
+  {title:"BSEC নতুন নেতৃত্ব: বিনিয়োগকারীদের জন্য কী বার্তা?",reason:"BSEC restructuring trending",tag:"BSEC",color:"#993556",bg:"#FBEAF0"},
+  {title:"JP Morgan-এর বাংলাদেশ নিয়ে আগ্রহ: সুযোগ না ফাঁদ?",reason:"Foreign investment curiosity surging",tag:"FDI",color:"#0F6E56",bg:"#E1F5EE"},
+  {title:"মধ্যবিত্তের SIP কৌশল: ছোট বিনিয়োগে বড় ফল",reason:"SIP content top performer",tag:"SIP",color:"#3B6D11",bg:"#EAF3DE"},
+];
+
+let state = {
+  tab: "pipeline",
+  batches: [
+    {id:"b1",name:"Batch 1 – June 2026"},
+    {id:"b2",name:"Batch 2 – July 2026"}
+  ],
+  videos: [
+    {id:1,title:"DSE PE Ratio বিশ্লেষণ",status:"Scripting",script:60,uploadDate:"2026-06-15",views:"",likes:"",notes:"Script draft done",batchId:"b1"},
+    {id:2,title:"বাজেট ২০২৬ শেয়ার বাজার",status:"Idea",script:0,uploadDate:"2026-06-22",views:"",likes:"",notes:"",batchId:"b1"},
+    {id:3,title:"FDR vs Equity Returns",status:"Published",script:100,uploadDate:"2026-06-01",views:"4200",likes:"310",notes:"Good retention",batchId:"b1"},
+    {id:4,title:"SIP মিরাকল কৌশল",status:"Scheduled",script:100,uploadDate:"2026-07-05",views:"",likes:"",notes:"",batchId:"b2"},
+  ]
+};
+
+// Save/load from localStorage
+function save(){try{localStorage.setItem("biniyog_state",JSON.stringify(state))}catch(e){}}
+function load(){try{const d=localStorage.getItem("biniyog_state");if(d)state=JSON.parse(d)}catch(e){}}
+load();
+
+const TABS = [
+  {id:"pipeline",label:"Pipeline",icon:"📋"},
+  {id:"batches",label:"Batches",icon:"📦"},
+  {id:"calendar",label:"Calendar",icon:"📅"},
+  {id:"performance",label:"Stats",icon:"📊"},
+  {id:"viral",label:"Viral",icon:"🔥"},
+];
+
+function badge(status){
+  const s=STATUS_STYLES[status]||{bg:"#eee",color:"#555",border:"#ccc"};
+  return `<span class="badge" style="background:${s.bg};color:${s.color};border-color:${s.border}">${status}</span>`;
+}
+
+function renderMetrics(){
+  const total=state.videos.length;
+  const pub=state.videos.filter(v=>v.status==="Published").length;
+  const inp=state.videos.filter(v=>!["Published","Idea"].includes(v.status)).length;
+  const sch=state.videos.filter(v=>v.status==="Scheduled").length;
+  const cards=[
+    {label:"Total Videos",value:total,bg:"#EEEDFE",color:"#534AB7",border:"#7F77DD"},
+    {label:"Published",value:pub,bg:"#EAF3DE",color:"#3B6D11",border:"#639922"},
+    {label:"In Progress",value:inp,bg:"#E6F1FB",color:"#185FA5",border:"#378ADD"},
+    {label:"Scheduled",value:sch,bg:"#E1F5EE",color:"#0F6E56",border:"#1D9E75"},
+  ];
+  document.getElementById("metrics").innerHTML=cards.map(c=>`
+    <div class="metric-card" style="background:${c.bg};border-left-color:${c.border}">
+      <div class="metric-label" style="color:${c.color}">${c.label}</div>
+      <div class="metric-value" style="color:${c.color}">${c.value}</div>
+    </div>`).join("");
+}
+
+function renderTabs(){
+  document.getElementById("tabs").innerHTML=TABS.map((t,i)=>{
+    const active=state.tab===t.id;
+    const col=TAB_COLORS[i%TAB_COLORS.length];
+    return `<button class="tab-btn" onclick="setTab('${t.id}')" style="background:${active?col:"#fff"};color:${active?"#fff":col};border:1.5px solid ${col}">${t.label}</button>`;
+  }).join("");
+}
+
+function renderBottomNav(){
+  document.getElementById("bottomNav").innerHTML=TABS.map(t=>`
+    <button class="nav-btn ${state.tab===t.id?"active":""}" onclick="setTab('${t.id}')">
+      <span class="nav-icon">${t.icon}</span>${t.label}
+    </button>`).join("");
+}
+
+function setTab(id){state.tab=id;render();}
+
+function renderContent(){
+  const el=document.getElementById("content");
+  if(state.tab==="pipeline") el.innerHTML=renderPipeline();
+  else if(state.tab==="batches") el.innerHTML=renderBatches();
+  else if(state.tab==="calendar") el.innerHTML=renderCalendar();
+  else if(state.tab==="performance") el.innerHTML=renderPerformance();
+  else if(state.tab==="viral") el.innerHTML=renderViral();
+  bindEvents();
+}
+
+function renderPipeline(){
+  return STATUS_OPTIONS.map(status=>{
+    const s=STATUS_STYLES[status];
+    const cols=state.videos.filter(v=>v.status===status);
+    return `<div class="section-title" style="color:${s.color}">${status} (${cols.length})</div>`+
+    cols.map(v=>`
+      <div class="video-card" style="border-left-color:${s.border}">
+        <input value="${esc(v.title)}" placeholder="Video title (Bangla ok)" data-id="${v.id}" data-field="title" onchange="updateVideo(this)"/>
+        <select data-id="${v.id}" data-field="status" onchange="updateVideo(this)">
+          ${STATUS_OPTIONS.map(opt=>`<option${opt===v.status?" selected":""}>${opt}</option>`).join("")}
+        </select>
+        <div class="script-row">
+          <span style="font-size:11px;font-weight:600;color:${s.color}">Script</span>
+          <input type="range" min="0" max="100" step="10" value="${v.script}" data-id="${v.id}" data-field="script" oninput="updateVideo(this)"/>
+          <span class="script-pct" style="color:${s.color}">${v.script}%</span>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:6px">
+          <button class="del-btn" onclick="deleteVideo(${v.id})">✕ Delete</button>
+        </div>
+      </div>`).join("")+
+    `<button class="add-btn" style="background:${s.color};color:#fff;margin-bottom:14px" onclick="addVideo('${state.batches[0]?.id||"b1"}','${status}')">+ Add ${status}</button>`;
+  }).join("");
+}
+
+function renderBatches(){
+  return state.batches.map((batch,bi)=>{
+    const col=BATCH_COLORS[bi%BATCH_COLORS.length];
+    const bv=state.videos.filter(v=>v.batchId===batch.id);
+    const done=bv.filter(v=>v.status==="Published").length;
+    const pct=bv.length?Math.round(done/bv.length*100):0;
+    return `<div class="batch-card" style="border-top-color:${col}">
+      <div class="batch-title" style="color:${col}">${esc(batch.name)}</div>
+      <div style="font-size:11px;color:${col};font-weight:600;margin-bottom:8px">${done}/${bv.length} published · ${pct}%</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+      ${bv.map(v=>`
+        <div style="border-bottom:0.5px solid #f0eeff;padding:8px 0">
+          <input value="${esc(v.title)}" placeholder="Video title" data-id="${v.id}" data-field="title" onchange="updateVideo(this)" style="width:100%;border:1px solid #e0dff5;border-radius:8px;padding:6px 10px;font-size:13px;margin-bottom:5px"/>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <select data-id="${v.id}" data-field="status" onchange="updateVideo(this)" style="flex:1;border:1px solid #e0dff5;border-radius:8px;padding:5px 8px;font-size:12px">
+              ${STATUS_OPTIONS.map(opt=>`<option${opt===v.status?" selected":""}>${opt}</option>`).join("")}
+            </select>
+            <input type="date" value="${v.uploadDate}" data-id="${v.id}" data-field="uploadDate" onchange="updateVideo(this)" style="flex:1;border:1px solid #e0dff5;border-radius:8px;padding:5px 8px;font-size:12px"/>
+          </div>
+        </div>`).join("")}
+      <button class="add-btn" style="background:${col};color:#fff;margin-top:8px" onclick="addVideo('${batch.id}','Idea')">+ Add video</button>
+    </div>`;
+  }).join("")+
+  `<div class="input-row">
+    <input id="newBatchInput" placeholder="New batch name (e.g. Batch 3 – Aug 2026)"/>
+    <button class="add-btn" style="background:#185FA5;color:#fff;margin-top:0" onclick="addBatch()">+ Add</button>
+  </div>`;
+}
+
+function renderCalendar(){
+  const cvids=state.videos.filter(v=>v.uploadDate).sort((a,b)=>a.uploadDate.localeCompare(b.uploadDate));
+  if(!cvids.length) return `<p style="color:#888;font-size:14px;margin-top:8px">No upload dates set yet. Add dates in Batches tab.</p>`;
+  return cvids.map(v=>{
+    const s=STATUS_STYLES[v.status]||{};
+    const bi=state.batches.findIndex(b=>b.id===v.batchId);
+    const bname=state.batches[bi]?.name||"";
+    const bcol=BATCH_COLORS[bi%BATCH_COLORS.length]||"#888";
+    return `<div class="cal-row" style="border-left-color:${s.border||"#ccc"}">
+      <div class="cal-date">${v.uploadDate}</div>
+      <div class="cal-title">${esc(v.title)||"(Untitled)"}</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        ${badge(v.status)}
+        <span style="font-size:10px;font-weight:700;color:${bcol};background:${bcol}18;padding:2px 8px;border-radius:10px">${esc(bname)}</span>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderPerformance(){
+  return `<div class="perf-scroll">
+    <table class="perf-table">
+      <thead><tr><th>Title</th><th>Status</th><th>Views</th><th>Likes</th><th>Notes</th></tr></thead>
+      <tbody>${state.videos.map(v=>`
+        <tr>
+          <td style="font-weight:500;font-size:12px">${esc(v.title)||"(Untitled)"}</td>
+          <td>${badge(v.status)}</td>
+          <td><input value="${esc(v.views)}" placeholder="—" data-id="${v.id}" data-field="views" onchange="updateVideo(this)"/></td>
+          <td><input value="${esc(v.likes)}" placeholder="—" data-id="${v.id}" data-field="likes" onchange="updateVideo(this)"/></td>
+          <td><input value="${esc(v.notes)}" placeholder="—" data-id="${v.id}" data-field="notes" onchange="updateVideo(this)" style="width:100px"/></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function renderViral(){
+  return `<div style="font-size:12px;font-weight:600;color:#D85A30;margin-bottom:12px">🔥 Trending Bangla finance topics – June 2026</div>`+
+  VIRAL.map((t,i)=>`
+    <div class="viral-card" style="border-left-color:${t.color}">
+      <div class="viral-title">${t.title}</div>
+      <div class="viral-reason">${t.reason}</div>
+      <div class="viral-row">
+        <span style="font-size:10px;font-weight:700;padding:3px 10px;background:${t.bg};color:${t.color};border-radius:16px;border:1px solid ${t.color}">${t.tag}</span>
+        <button class="add-btn" style="background:${t.color};color:#fff;padding:6px 14px;font-size:12px;margin-top:0" onclick="addViralTopic(${i})">+ Add to pipeline</button>
+      </div>
+    </div>`).join("");
+}
+
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+function updateVideo(el){
+  const id=Number(el.dataset.id)||el.dataset.id;
+  const field=el.dataset.field;
+  const value=el.type==="range"?Number(el.value):el.value;
+  state.videos=state.videos.map(v=>v.id==id?{...v,[field]:value}:v);
+  save();
+  if(field==="status"||field==="script") render();
+}
+
+function deleteVideo(id){
+  state.videos=state.videos.filter(v=>v.id!=id);
+  save();render();
+}
+
+function addVideo(batchId, status){
+  state.videos.push({id:Date.now(),title:"",status:status||"Idea",script:0,uploadDate:"",views:"",likes:"",notes:"",batchId});
+  save();render();
+}
+
+function addBatch(){
+  const inp=document.getElementById("newBatchInput");
+  if(!inp||!inp.value.trim())return;
+  state.batches.push({id:"b"+Date.now(),name:inp.value.trim()});
+  save();render();
+}
+
+function addViralTopic(i){
+  const t=VIRAL[i];
+  state.videos.push({id:Date.now(),title:t.title,status:"Idea",script:0,uploadDate:"",views:"",likes:"",notes:t.reason,batchId:state.batches[0]?.id||"b1"});
+  state.tab="pipeline";
+  save();render();
+}
+
+function buildEmailBody(){
+  let body="BINIYOGLOGIC – Full Content Plan\n\n";
+  state.batches.forEach(batch=>{
+    const bv=state.videos.filter(v=>v.batchId===batch.id);
+    body+=`━━━ ${batch.name} ━━━\n`;
+    if(!bv.length){body+="  No videos yet.\n";}
+    bv.forEach((v,i)=>{
+      body+=`  ${i+1}. ${v.title||"(Untitled)"}\n     Status: ${v.status} | Script: ${v.script}%`;
+      if(v.uploadDate)body+=` | Upload: ${v.uploadDate}`;
+      if(v.views)body+=` | Views: ${v.views}`;
+      if(v.notes)body+=`\n     Notes: ${v.notes}`;
+      body+="\n";
+    });
+    body+="\n";
+  });
+  return body;
+}
+
+async function sendEmail(){
+  const btn=document.querySelector(".send-btn");
+  const statusEl=document.getElementById("emailStatus");
+  btn.textContent="Sending…";btn.disabled=true;
+  statusEl.style.display="block";statusEl.style.color="#fff";statusEl.textContent="Sending…";
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",max_tokens:1000,
+        mcp_servers:[{type:"url",url:"https://gmailmcp.googleapis.com/mcp/v1",name:"gmail-mcp"}],
+        messages:[{role:"user",content:`Send an email via Gmail:\nTo: ${RECIPIENT}\nSubject: BINIYOGLOGIC Content Plan – ${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}\nBody:\n${buildEmailBody()}\nSend it now.`}]
+      })
+    });
+    const data=await res.json();
+    const ok=data.content?.some(b=>b.type==="text"&&(b.text.toLowerCase().includes("sent")||b.text.toLowerCase().includes("success")));
+    statusEl.textContent=ok?"✓ Sent!":"✓ Dispatched";
+  }catch(e){statusEl.textContent="✗ Failed";}
+  btn.textContent="📧 Send Plan";btn.disabled=false;
+  setTimeout(()=>{statusEl.style.display="none"},3000);
+}
+
+function bindEvents(){}
+
+function render(){
+  renderMetrics();
+  renderTabs();
+  renderBottomNav();
+  renderContent();
+}
+
+render();
+
+// Register service worker
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
