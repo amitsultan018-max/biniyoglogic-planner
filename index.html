@@ -3,65 +3,103 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<meta name="theme-color" content="#534AB7"/>
+<meta name="theme-color" content="#1a1a2e"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="BiniyogLogic"/>
 <title>BINIYOGLOGIC Planner</title>
 <style>
+:root{
+  --bg:#0f0f1a;--bg2:#1a1a2e;--bg3:#22223a;--bg4:#2a2a45;
+  --border:#33335a;--text:#e8e8f5;--text2:#9999cc;--text3:#6666aa;
+  --purple:#7c6ff7;--blue:#4da6ff;--green:#2ecc8e;--red:#ff6b6b;
+  --orange:#ff9f43;--pink:#ff6b9d;--yellow:#ffd32a;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f3ff;color:#1a1a2e;min-height:100vh;padding-bottom:90px}
-.header{background:linear-gradient(135deg,#534AB7,#185FA5,#0F6E56);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(83,74,183,0.3)}
-.header-title{color:#fff;font-size:18px;font-weight:700}
-.header-sub{color:rgba(255,255,255,0.75);font-size:11px;margin-top:2px}
-.send-btn{background:#fff;color:#534AB7;border:none;border-radius:20px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
-.save-indicator{position:fixed;top:70px;right:14px;background:#0F6E56;color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none}
-.save-indicator.show{opacity:1}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:90px}
+/* Header */
+.header{background:linear-gradient(135deg,#3a2d8a,#1a4a8a,#0d6e56);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(124,111,247,0.3)}
+.header-title{color:#fff;font-size:18px;font-weight:700;letter-spacing:-0.3px}
+.header-sub{color:rgba(255,255,255,0.6);font-size:11px;margin-top:2px}
+.send-btn{background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.send-btn:hover{background:rgba(255,255,255,0.25)}
+/* Toast */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;padding:8px 20px;border-radius:20px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.toast.ok{background:#2ecc8e;color:#fff}
+.toast.err{background:#ff6b6b;color:#fff}
+.toast.info{background:#7c6ff7;color:#fff}
+/* Metrics */
 .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px}
-.metric-card{border-radius:12px;padding:12px 14px;border-left:4px solid}
-.metric-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.metric-card{border-radius:12px;padding:12px 14px;border-left:3px solid;background:var(--bg2)}
+.metric-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;opacity:0.8}
 .metric-value{font-size:28px;font-weight:700}
+/* Tabs */
 .tabs{display:flex;gap:6px;padding:0 14px 10px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab-btn{border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s}
+.tab-btn{border:none;border-radius:20px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;letter-spacing:0.2px}
+/* Content */
 .content{padding:0 14px}
+/* Badge */
 .badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid;white-space:nowrap}
-.video-card{background:#fff;border-radius:12px;padding:12px;margin-bottom:8px;border-left:4px solid;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.field{width:100%;border:1px solid #e0dff5;border-radius:8px;padding:7px 10px;font-size:13px;margin-top:6px;background:#fafafa;outline:none;font-family:inherit}
-.field:focus{border-color:#534AB7;background:#fff}
+/* Cards */
+.card{background:var(--bg2);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border)}
+.card-left{border-left:4px solid}
+/* Fields */
+.field{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;margin-top:6px;background:var(--bg3);color:var(--text);outline:none;font-family:inherit;transition:border-color 0.2s}
+.field:focus{border-color:var(--purple)}
+textarea.field{resize:vertical;min-height:80px;line-height:1.5}
 select.field{cursor:pointer}
+.field-row{display:flex;gap:8px;flex-wrap:wrap}
+.field-row .field{flex:1;min-width:120px;margin-top:0}
+/* Script slider */
 .script-row{display:flex;align-items:center;gap:8px;margin-top:8px}
-.script-row input[type=range]{flex:1;accent-color:#534AB7}
+.script-row input[type=range]{flex:1;accent-color:var(--purple)}
 .script-pct{font-size:12px;font-weight:700;min-width:36px;text-align:right}
-.batch-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;border-top:4px solid;box-shadow:0 1px 6px rgba(0,0,0,0.07)}
-.batch-video-row{border-bottom:0.5px solid #f0eeff;padding:8px 0}
-.progress-bar{height:6px;background:#eee;border-radius:4px;margin-bottom:12px;overflow:hidden}
+/* Progress */
+.progress-bar{height:6px;background:var(--bg4);border-radius:4px;margin-bottom:12px;overflow:hidden}
 .progress-fill{height:100%;border-radius:4px;transition:width 0.4s}
-.cal-row{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:7px;border-left:5px solid;display:flex;flex-direction:column;gap:5px;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
-.perf-scroll{overflow-x:auto;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+/* Section title */
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;margin:14px 0 8px;opacity:0.7}
+/* Buttons */
+.btn{border:none;border-radius:20px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
+.btn-sm{padding:5px 12px;font-size:11px}
+.btn-del{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer}
+/* Calendar row */
+.cal-row{background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:7px;border-left:5px solid;display:flex;flex-direction:column;gap:5px;border:1px solid var(--border);border-left:5px solid}
+/* Perf table */
+.perf-scroll{overflow-x:auto;border-radius:12px}
 .perf-table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
-.perf-table thead tr{background:#534AB7}
-.perf-table thead th{padding:9px 10px;color:#fff;font-weight:700;text-align:left}
-.perf-table tbody tr:nth-child(even){background:#f8f7ff}
-.perf-table tbody tr:nth-child(odd){background:#fff}
-.perf-table td{padding:7px 10px;border-bottom:0.5px solid #ebebeb;vertical-align:middle}
-.perf-input{border:1px solid #e0dff5;border-radius:6px;padding:4px 7px;font-size:12px;width:85px;background:#fafafa;font-family:inherit;outline:none}
-.perf-input:focus{border-color:#534AB7}
-.viral-card{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;border-left:5px solid;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.viral-title{font-size:13px;font-weight:700;margin-bottom:4px}
-.viral-reason{font-size:11px;color:#666;font-style:italic;margin-bottom:8px}
-.viral-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.add-btn{border:none;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer}
-.del-btn{background:transparent;border:1px solid #D85A30;color:#D85A30;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;margin-top:8px}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e0dff5;display:flex;z-index:100;box-shadow:0 -2px 12px rgba(0,0,0,0.08)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px 6px;background:transparent;border:none;cursor:pointer;font-size:9px;font-weight:600;color:#aaa;gap:2px;transition:color 0.15s}
-.nav-btn.active{color:#534AB7}
-.nav-icon{font-size:20px;line-height:1}
-.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin:12px 0 8px}
+.perf-table thead tr{background:var(--purple)}
+.perf-table thead th{padding:10px;color:#fff;font-weight:700;text-align:left}
+.perf-table tbody tr:nth-child(even){background:var(--bg3)}
+.perf-table tbody tr:nth-child(odd){background:var(--bg2)}
+.perf-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.perf-input{border:1px solid var(--border);border-radius:6px;padding:4px 7px;font-size:12px;width:85px;background:var(--bg3);color:var(--text);font-family:inherit;outline:none}
+.perf-input:focus{border-color:var(--purple)}
+/* Viral */
+.viral-card{background:var(--bg2);border-radius:12px;padding:12px 14px;margin-bottom:8px;border-left:5px solid;border:1px solid var(--border);border-left:5px solid}
+/* Ideas */
+.idea-box{background:var(--bg2);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border)}
+.idea-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;margin-right:4px;cursor:pointer}
+/* Budget */
+.budget-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.budget-stat{background:var(--bg2);border-radius:12px;padding:12px;border-left:3px solid;text-align:center}
+.budget-stat-label{font-size:10px;font-weight:700;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.budget-stat-value{font-size:18px;font-weight:700}
+.budget-row{background:var(--bg2);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
+/* Input row */
 .input-row{display:flex;gap:8px;margin-top:12px}
-.input-row input{flex:1;border:1px solid #e0dff5;border-radius:10px;padding:8px 12px;font-size:13px;background:#fff;outline:none;font-family:inherit}
-.input-row input:focus{border-color:#534AB7}
-.empty-msg{color:#999;font-size:14px;margin-top:8px;padding:20px;text-align:center;background:#fff;border-radius:12px;border:1px dashed #ddd}
+.input-row input{flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;background:var(--bg3);color:var(--text);outline:none;font-family:inherit}
+.input-row input:focus{border-color:var(--purple)}
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.4)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px 6px;background:transparent;border:none;cursor:pointer;font-size:9px;font-weight:600;color:var(--text3);gap:2px;transition:color 0.15s}
+.nav-btn.active{color:var(--purple)}
+.nav-icon{font-size:20px;line-height:1}
+.empty-msg{color:var(--text3);font-size:14px;padding:30px;text-align:center;background:var(--bg2);border-radius:12px;border:1px dashed var(--border)}
+/* Balance chip */
+.balance-chip{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px}
 </style>
 </head>
 <body>
@@ -74,366 +112,474 @@ select.field{cursor:pointer}
   <button class="send-btn" onclick="sendEmail()">📧 Send Plan</button>
 </div>
 
-<div class="save-indicator" id="saveIndicator">✓ Saved</div>
+<div class="toast" id="toast"></div>
 <div class="metrics" id="metrics"></div>
 <div class="tabs" id="tabs"></div>
 <div class="content" id="content"></div>
 <div class="bottom-nav" id="bottomNav"></div>
 
 <script>
-// ─── Constants ───────────────────────────────────────────────────────────────
+// ── Constants ────────────────────────────────────────────────────────────────
 const RECIPIENT = "mnahidakhanam@gmail.com";
-const STORAGE_KEY = "biniyog_data_v3";
+const STORAGE_KEY = "biniyog_v4";
 const STATUS_OPTIONS = ["Idea","Scripting","Recorded","Edited","Scheduled","Published"];
 const SS = {
-  Idea:      {bg:"#FAEEDA",color:"#854F0B",border:"#EF9F27"},
-  Scripting: {bg:"#E6F1FB",color:"#185FA5",border:"#378ADD"},
-  Recorded:  {bg:"#EEEDFE",color:"#534AB7",border:"#7F77DD"},
-  Edited:    {bg:"#FBEAF0",color:"#993556",border:"#D4537E"},
-  Scheduled: {bg:"#E1F5EE",color:"#0F6E56",border:"#1D9E75"},
-  Published: {bg:"#EAF3DE",color:"#3B6D11",border:"#639922"},
+  Idea:      {bg:"rgba(255,159,67,0.15)",  color:"#ff9f43", border:"#ff9f43"},
+  Scripting: {bg:"rgba(77,166,255,0.15)",  color:"#4da6ff", border:"#4da6ff"},
+  Recorded:  {bg:"rgba(124,111,247,0.15)", color:"#7c6ff7", border:"#7c6ff7"},
+  Edited:    {bg:"rgba(255,107,157,0.15)", color:"#ff6b9d", border:"#ff6b9d"},
+  Scheduled: {bg:"rgba(46,204,142,0.15)",  color:"#2ecc8e", border:"#2ecc8e"},
+  Published: {bg:"rgba(255,211,42,0.15)",  color:"#ffd32a", border:"#ffd32a"},
 };
-const BC  = ["#534AB7","#185FA5","#0F6E56","#993556","#D85A30","#854F0B"];
-const TC  = ["#534AB7","#185FA5","#0F6E56","#993556","#D85A30"];
+const BC  = ["#7c6ff7","#4da6ff","#2ecc8e","#ff6b9d","#ff9f43","#ff6b6b"];
+const TC  = ["#7c6ff7","#4da6ff","#2ecc8e","#ff6b9d","#ff9f43","#ff6b6b"];
+const PLATFORMS = ["YouTube","Facebook","Instagram","TikTok","LinkedIn","Other"];
 const TABS = [
   {id:"pipeline", label:"Pipeline", icon:"📋"},
   {id:"batches",  label:"Batches",  icon:"📦"},
   {id:"calendar", label:"Calendar", icon:"📅"},
+  {id:"ideas",    label:"Ideas",    icon:"💡"},
+  {id:"budget",   label:"Budget",   icon:"💰"},
   {id:"perf",     label:"Stats",    icon:"📊"},
   {id:"viral",    label:"Viral",    icon:"🔥"},
 ];
 const VIRAL = [
-  {title:"বাজেট ২০২৫-২৬: শেয়ার বাজারে কী প্রভাব পড়বে?",  reason:"Post-budget analysis trending",        tag:"Budget",  color:"#854F0B", bg:"#FAEEDA"},
-  {title:"DSE-তে PE Ratio কম থাকলে কি এখনই কিনবেন?",       reason:"DSE valuation debates viral",          tag:"DSE",     color:"#185FA5", bg:"#E6F1FB"},
-  {title:"FDR নাকি শেয়ার? কোথায় রাখবেন আপনার সঞ্চয়?",    reason:"High search volume comparison",        tag:"Compare", color:"#534AB7", bg:"#EEEDFE"},
-  {title:"BSEC নতুন নেতৃত্ব: বিনিয়োগকারীদের জন্য কী বার্তা?", reason:"BSEC restructuring trending",     tag:"BSEC",    color:"#993556", bg:"#FBEAF0"},
-  {title:"JP Morgan-এর বাংলাদেশ নিয়ে আগ্রহ: সুযোগ না ফাঁদ?", reason:"Foreign investment curiosity surging", tag:"FDI",  color:"#0F6E56", bg:"#E1F5EE"},
-  {title:"মধ্যবিত্তের SIP কৌশল: ছোট বিনিয়োগে বড় ফল",     reason:"SIP content top performer",           tag:"SIP",     color:"#3B6D11", bg:"#EAF3DE"},
+  {title:"বাজেট ২০২৫-২৬: শেয়ার বাজারে কী প্রভাব পড়বে?",      reason:"Post-budget analysis trending",          tag:"Budget",  color:"#ff9f43"},
+  {title:"DSE-তে PE Ratio কম থাকলে কি এখনই কিনবেন?",           reason:"DSE valuation debates viral",            tag:"DSE",     color:"#4da6ff"},
+  {title:"FDR নাকি শেয়ার? কোথায় রাখবেন আপনার সঞ্চয়?",        reason:"High search volume comparison",          tag:"Compare", color:"#7c6ff7"},
+  {title:"BSEC নতুন নেতৃত্ব: বিনিয়োগকারীদের জন্য কী বার্তা?",  reason:"BSEC restructuring trending",            tag:"BSEC",    color:"#ff6b9d"},
+  {title:"JP Morgan-এর বাংলাদেশ নিয়ে আগ্রহ: সুযোগ না ফাঁদ?",  reason:"Foreign investment curiosity surging",   tag:"FDI",     color:"#2ecc8e"},
+  {title:"মধ্যবিত্তের SIP কৌশল: ছোট বিনিয়োগে বড় ফল",         reason:"SIP content top performer",             tag:"SIP",     color:"#ffd32a"},
 ];
 
-// ─── State ───────────────────────────────────────────────────────────────────
+// ── Default State ────────────────────────────────────────────────────────────
 const DEFAULT = {
-  tab: "pipeline",
-  batches: [
-    {id:"b1", name:"Batch 1 – June 2026"},
-    {id:"b2", name:"Batch 2 – July 2026"},
+  tab:"pipeline",
+  batches:[
+    {id:"b1",name:"Batch 1 – June 2026"},
+    {id:"b2",name:"Batch 2 – July 2026"},
   ],
-  videos: [
-    {id:1, title:"DSE PE Ratio বিশ্লেষণ",    status:"Scripting", script:60,  uploadDate:"2026-06-15", views:"",     likes:"",    notes:"Script draft done",  batchId:"b1"},
-    {id:2, title:"বাজেট ২০২৬ শেয়ার বাজার",  status:"Idea",      script:0,   uploadDate:"2026-06-22", views:"",     likes:"",    notes:"",                   batchId:"b1"},
-    {id:3, title:"FDR vs Equity Returns",     status:"Published", script:100, uploadDate:"2026-06-01", views:"4200", likes:"310", notes:"Good retention",     batchId:"b1"},
-    {id:4, title:"SIP মিরাকল কৌশল",          status:"Scheduled", script:100, uploadDate:"2026-07-05", views:"",     likes:"",    notes:"",                   batchId:"b2"},
+  videos:[
+    {id:1,title:"DSE PE Ratio বিশ্লেষণ",   status:"Scripting",script:60, uploadDate:"2026-06-15",views:"",   likes:"",  notes:"Script draft done",batchId:"b1"},
+    {id:2,title:"বাজেট ২০২৬ শেয়ার বাজার", status:"Idea",     script:0,  uploadDate:"2026-06-22",views:"",   likes:"",  notes:"",                 batchId:"b1"},
+    {id:3,title:"FDR vs Equity Returns",    status:"Published",script:100,uploadDate:"2026-06-01",views:"4200",likes:"310",notes:"Good retention",  batchId:"b1"},
+    {id:4,title:"SIP মিরাকল কৌশল",         status:"Scheduled",script:100,uploadDate:"2026-07-05",views:"",   likes:"",  notes:"",                 batchId:"b2"},
   ],
+  ideas:[],
+  budget:[],
 };
 
 let state;
 
-// ─── Persistent storage ───────────────────────────────────────────────────────
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      // Merge with defaults so new fields always exist
-      state = {
-        tab: "pipeline",
-        batches: parsed.batches || DEFAULT.batches,
-        videos:  parsed.videos  || DEFAULT.videos,
-      };
+// ── Storage ──────────────────────────────────────────────────────────────────
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const p=JSON.parse(raw);
+      state={tab:"pipeline",batches:p.batches||DEFAULT.batches,videos:p.videos||DEFAULT.videos,ideas:p.ideas||[],budget:p.budget||[]};
     } else {
-      state = JSON.parse(JSON.stringify(DEFAULT));
+      state=JSON.parse(JSON.stringify(DEFAULT));
     }
-  } catch(e) {
-    state = JSON.parse(JSON.stringify(DEFAULT));
-  }
+  }catch(e){state=JSON.parse(JSON.stringify(DEFAULT));}
 }
 
-let saveTimer = null;
-function save() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      batches: state.batches,
-      videos:  state.videos,
-    }));
-    showSaved();
-  } catch(e) { console.warn("Save error", e); }
+function save(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({batches:state.batches,videos:state.videos,ideas:state.ideas,budget:state.budget}));
+    showToast("✓ Saved","ok");
+  }catch(e){showToast("✗ Save failed","err");}
 }
 
-function showSaved() {
-  const el = document.getElementById("saveIndicator");
-  el.classList.add("show");
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => el.classList.remove("show"), 1500);
+// ── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg,type="ok"){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.className=`toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2000);
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s || "")
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-function badge(status) {
-  const s = SS[status] || {bg:"#eee",color:"#555",border:"#ccc"};
-  return `<span class="badge" style="background:${s.bg};color:${s.color};border-color:${s.border}">${status}</span>`;
-}
-function newId() { return Date.now() + Math.floor(Math.random()*1000); }
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function badge(status){const s=SS[status]||{bg:"#333",color:"#aaa",border:"#aaa"};return`<span class="badge" style="background:${s.bg};color:${s.color};border-color:${s.border}">${status}</span>`;}
+function newId(){return Date.now()+Math.floor(Math.random()*9999);}
+function fmt(n){return Number(n||0).toLocaleString();}
 
-// ─── Mutations ────────────────────────────────────────────────────────────────
-function updateVideoField(id, field, value) {
-  state.videos = state.videos.map(v => v.id == id ? {...v, [field]: value} : v);
+// ── Mutations ────────────────────────────────────────────────────────────────
+function updateVideoField(id,field,value){
+  state.videos=state.videos.map(v=>v.id==id?{...v,[field]:value}:v);
   save();
-  // Only full re-render when status changes (affects pipeline grouping)
-  if (field === "status") render();
-  else renderMetrics();
+  if(field==="status")render();else renderMetrics();
+}
+function deleteVideo(id){if(!confirm("Delete this video?"))return;state.videos=state.videos.filter(v=>v.id!=id);save();render();}
+function addVideo(batchId,status){state.videos.push({id:newId(),title:"",status:status||"Idea",script:0,uploadDate:"",views:"",likes:"",notes:"",batchId});save();render();}
+function addBatch(){const inp=document.getElementById("nbi");if(!inp||!inp.value.trim())return;state.batches.push({id:"b"+newId(),name:inp.value.trim()});save();render();}
+function addViralTopic(i){const t=VIRAL[i];state.videos.push({id:newId(),title:t.title,status:"Idea",script:0,uploadDate:"",views:"",likes:"",notes:t.reason,batchId:state.batches[0]?.id||"b1"});state.tab="pipeline";save();render();}
+
+// Ideas
+function addIdea(){
+  const title=document.getElementById("ideaTitle")?.value?.trim();
+  const detail=document.getElementById("ideaDetail")?.value?.trim();
+  const tag=document.getElementById("ideaTag")?.value?.trim();
+  if(!title)return showToast("Enter an idea title","err");
+  state.ideas.push({id:newId(),title,detail,tag,date:new Date().toLocaleDateString("en-GB")});
+  save();render();
+}
+function deleteIdea(id){state.ideas=state.ideas.filter(i=>i.id!=id);save();render();}
+
+// Budget
+function addBudget(){
+  const platform=document.getElementById("bPlatform")?.value;
+  const project=document.getElementById("bProject")?.value?.trim();
+  const duration=document.getElementById("bDuration")?.value?.trim();
+  const estimated=parseFloat(document.getElementById("bEstimated")?.value)||0;
+  const spent=parseFloat(document.getElementById("bSpent")?.value)||0;
+  if(!project)return showToast("Enter project name","err");
+  state.budget.push({id:newId(),platform,project,duration,estimated,spent});
+  save();render();
+}
+function deleteBudget(id){state.budget=state.budget.filter(b=>b.id!=id);save();render();}
+function updateBudgetField(id,field,value){
+  state.budget=state.budget.map(b=>b.id==id?{...b,[field]:isNaN(+value)?value:+value}:b);
+  save();renderBudgetOnly();
 }
 
-function deleteVideo(id) {
-  if (!confirm("Delete this video?")) return;
-  state.videos = state.videos.filter(v => v.id != id);
-  save(); render();
+// ── Render ───────────────────────────────────────────────────────────────────
+function renderMetrics(){
+  const total=state.videos.length;
+  const pub=state.videos.filter(v=>v.status==="Published").length;
+  const inp=state.videos.filter(v=>!["Published","Idea"].includes(v.status)).length;
+  const sch=state.videos.filter(v=>v.status==="Scheduled").length;
+  document.getElementById("metrics").innerHTML=[
+    {label:"Total",    value:total,color:"#7c6ff7",border:"#7c6ff7"},
+    {label:"Published",value:pub,  color:"#ffd32a",border:"#ffd32a"},
+    {label:"Progress", value:inp,  color:"#4da6ff",border:"#4da6ff"},
+    {label:"Scheduled",value:sch,  color:"#2ecc8e",border:"#2ecc8e"},
+  ].map(c=>`<div class="metric-card" style="border-left-color:${c.border}">
+    <div class="metric-label" style="color:${c.color}">${c.label}</div>
+    <div class="metric-value" style="color:${c.color}">${c.value}</div>
+  </div>`).join("");
 }
 
-function addVideo(batchId, status) {
-  state.videos.push({
-    id: newId(), title:"", status: status||"Idea",
-    script:0, uploadDate:"", views:"", likes:"", notes:"", batchId,
-  });
-  save(); render();
-}
-
-function addBatch() {
-  const inp = document.getElementById("newBatchInput");
-  if (!inp || !inp.value.trim()) return;
-  state.batches.push({id:"b"+newId(), name: inp.value.trim()});
-  save(); render();
-}
-
-function addViralTopic(i) {
-  const t = VIRAL[i];
-  state.videos.push({
-    id: newId(), title: t.title, status:"Idea",
-    script:0, uploadDate:"", views:"", likes:"",
-    notes: t.reason, batchId: state.batches[0]?.id || "b1",
-  });
-  state.tab = "pipeline";
-  save(); render();
-}
-
-// ─── Render helpers ───────────────────────────────────────────────────────────
-function renderMetrics() {
-  const total   = state.videos.length;
-  const pub     = state.videos.filter(v => v.status==="Published").length;
-  const inProg  = state.videos.filter(v => !["Published","Idea"].includes(v.status)).length;
-  const sched   = state.videos.filter(v => v.status==="Scheduled").length;
-  const cards   = [
-    {label:"Total Videos", value:total,  bg:"#EEEDFE", color:"#534AB7", border:"#7F77DD"},
-    {label:"Published",    value:pub,    bg:"#EAF3DE", color:"#3B6D11", border:"#639922"},
-    {label:"In Progress",  value:inProg, bg:"#E6F1FB", color:"#185FA5", border:"#378ADD"},
-    {label:"Scheduled",    value:sched,  bg:"#E1F5EE", color:"#0F6E56", border:"#1D9E75"},
-  ];
-  document.getElementById("metrics").innerHTML = cards.map(c => `
-    <div class="metric-card" style="background:${c.bg};border-left-color:${c.border}">
-      <div class="metric-label" style="color:${c.color}">${c.label}</div>
-      <div class="metric-value" style="color:${c.color}">${c.value}</div>
-    </div>`).join("");
-}
-
-function renderTabs() {
-  document.getElementById("tabs").innerHTML = TABS.map((t,i) => {
-    const active = state.tab === t.id;
-    const col = TC[i % TC.length];
-    return `<button class="tab-btn" onclick="setTab('${t.id}')"
-      style="background:${active?col:"#fff"};color:${active?"#fff":col};border:1.5px solid ${col}">
-      ${t.label}
-    </button>`;
+function renderTabs(){
+  document.getElementById("tabs").innerHTML=TABS.map((t,i)=>{
+    const a=state.tab===t.id,col=TC[i%TC.length];
+    return`<button class="tab-btn" onclick="setTab('${t.id}')" style="background:${a?col:"var(--bg3)"};color:${a?"#fff":col};border:1.5px solid ${col}">${t.label}</button>`;
   }).join("");
 }
 
-function renderBottomNav() {
-  document.getElementById("bottomNav").innerHTML = TABS.map(t => `
+function renderBottomNav(){
+  document.getElementById("bottomNav").innerHTML=TABS.map(t=>`
     <button class="nav-btn ${state.tab===t.id?"active":""}" onclick="setTab('${t.id}')">
       <span class="nav-icon">${t.icon}</span>${t.label}
     </button>`).join("");
 }
 
-// ─── Tab content ──────────────────────────────────────────────────────────────
-function renderPipeline() {
-  return STATUS_OPTIONS.map(status => {
-    const s = SS[status];
-    const cols = state.videos.filter(v => v.status === status);
-    return `
-      <div class="section-title" style="color:${s.color}">${status} <span style="font-size:10px;opacity:0.7">(${cols.length})</span></div>
-      ${cols.map(v => `
-        <div class="video-card" style="border-left-color:${s.border}">
-          <input class="field" value="${esc(v.title)}" placeholder="Video title (Bangla ok)"
-            onchange="updateVideoField(${v.id},'title',this.value)"/>
-          <select class="field" onchange="updateVideoField(${v.id},'status',this.value)">
-            ${STATUS_OPTIONS.map(o=>`<option${o===v.status?" selected":""}>${o}</option>`).join("")}
-          </select>
-          <div class="script-row">
-            <span style="font-size:11px;font-weight:700;color:${s.color}">Script</span>
-            <input type="range" min="0" max="100" step="10" value="${v.script}"
-              oninput="updateVideoField(${v.id},'script',+this.value);this.nextElementSibling.textContent=this.value+'%'"/>
-            <span class="script-pct" style="color:${s.color}">${v.script}%</span>
-          </div>
-          <div style="display:flex;justify-content:flex-end">
-            <button class="del-btn" onclick="deleteVideo(${v.id})">✕ Delete</button>
-          </div>
-        </div>`).join("")}
-      <button class="add-btn" style="background:${s.color};color:#fff;margin-bottom:14px"
-        onclick="addVideo('${state.batches[0]?.id||"b1"}','${status}')">+ Add ${status}</button>`;
+function renderPipeline(){
+  return STATUS_OPTIONS.map(status=>{
+    const s=SS[status],cols=state.videos.filter(v=>v.status===status);
+    return`<div class="section-title" style="color:${s.color}">${status} (${cols.length})</div>`+
+    cols.map(v=>`<div class="card card-left" style="border-left-color:${s.border}">
+      <input class="field" value="${esc(v.title)}" placeholder="Video title (Bangla ok)" onchange="updateVideoField(${v.id},'title',this.value)"/>
+      <select class="field" onchange="updateVideoField(${v.id},'status',this.value)">${STATUS_OPTIONS.map(o=>`<option${o===v.status?" selected":""}>${o}</option>`).join("")}</select>
+      <div class="script-row">
+        <span style="font-size:11px;font-weight:700;color:${s.color}">Script</span>
+        <input type="range" min="0" max="100" step="10" value="${v.script}" oninput="updateVideoField(${v.id},'script',+this.value);this.nextElementSibling.textContent=this.value+'%'"/>
+        <span class="script-pct" style="color:${s.color}">${v.script}%</span>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn-del" onclick="deleteVideo(${v.id})">✕ Delete</button>
+      </div>
+    </div>`).join("")+
+    `<button class="btn" style="background:${s.color};color:#1a1a2e;margin-bottom:14px" onclick="addVideo('${state.batches[0]?.id||"b1"}','${status}')">+ Add ${status}</button>`;
   }).join("");
 }
 
-function renderBatches() {
-  return state.batches.map((batch, bi) => {
-    const col = BC[bi % BC.length];
-    const bv  = state.videos.filter(v => v.batchId === batch.id);
-    const done = bv.filter(v => v.status==="Published").length;
-    const pct  = bv.length ? Math.round(done/bv.length*100) : 0;
-    return `
-      <div class="batch-card" style="border-top-color:${col}">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <div style="font-size:15px;font-weight:700;color:${col}">${esc(batch.name)}</div>
-          <span style="font-size:11px;font-weight:700;color:${col};background:${col}18;padding:2px 10px;border-radius:12px">${done}/${bv.length} · ${pct}%</span>
+function renderBatches(){
+  return state.batches.map((batch,bi)=>{
+    const col=BC[bi%BC.length],bv=state.videos.filter(v=>v.batchId===batch.id);
+    const done=bv.filter(v=>v.status==="Published").length,pct=bv.length?Math.round(done/bv.length*100):0;
+    return`<div class="card" style="border-top:3px solid ${col};padding:14px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:15px;font-weight:700;color:${col}">${esc(batch.name)}</div>
+        <span style="font-size:11px;font-weight:700;color:${col};background:${col}22;padding:2px 10px;border-radius:12px">${done}/${bv.length} · ${pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+      ${bv.map(v=>`<div style="border-bottom:1px solid var(--border);padding:8px 0">
+        <input class="field" value="${esc(v.title)}" placeholder="Video title" onchange="updateVideoField(${v.id},'title',this.value)" style="margin-bottom:6px"/>
+        <div class="field-row">
+          <select class="field" onchange="updateVideoField(${v.id},'status',this.value)">${STATUS_OPTIONS.map(o=>`<option${o===v.status?" selected":""}>${o}</option>`).join("")}</select>
+          <input type="date" class="field" value="${v.uploadDate}" onchange="updateVideoField(${v.id},'uploadDate',this.value)"/>
         </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
-        ${bv.map(v => `
-          <div class="batch-video-row">
-            <input class="field" value="${esc(v.title)}" placeholder="Video title"
-              onchange="updateVideoField(${v.id},'title',this.value)" style="margin-bottom:6px"/>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <select class="field" onchange="updateVideoField(${v.id},'status',this.value)" style="flex:1;margin-top:0">
-                ${STATUS_OPTIONS.map(o=>`<option${o===v.status?" selected":""}>${o}</option>`).join("")}
-              </select>
-              <input type="date" class="field" value="${v.uploadDate}"
-                onchange="updateVideoField(${v.id},'uploadDate',this.value)" style="flex:1;margin-top:0"/>
-            </div>
-            <input class="field" value="${esc(v.notes)}" placeholder="Notes…"
-              onchange="updateVideoField(${v.id},'notes',this.value)" style="margin-top:6px"/>
-          </div>`).join("")}
-        <button class="add-btn" style="background:${col};color:#fff;margin-top:10px;font-size:12px;padding:6px 14px"
-          onclick="addVideo('${batch.id}','Idea')">+ Add video</button>
-      </div>`;
-  }).join("") +
+      </div>`).join("")}
+      <button class="btn btn-sm" style="background:${col};color:#1a1a2e;margin-top:10px" onclick="addVideo('${batch.id}','Idea')">+ Add video</button>
+    </div>`;
+  }).join("")+
   `<div class="input-row">
-    <input id="newBatchInput" placeholder="New batch name (e.g. Batch 3 – Aug 2026)"/>
-    <button class="add-btn" style="background:#185FA5;color:#fff;padding:8px 16px;font-size:13px;margin-top:0"
-      onclick="addBatch()">+ Add</button>
+    <input id="nbi" placeholder="New batch name (e.g. Batch 3 – Aug 2026)"/>
+    <button class="btn" style="background:#4da6ff;color:#1a1a2e;margin-top:0" onclick="addBatch()">+ Add</button>
   </div>`;
 }
 
-function renderCalendar() {
-  const cv = state.videos.filter(v => v.uploadDate).sort((a,b) => a.uploadDate.localeCompare(b.uploadDate));
-  if (!cv.length) return `<div class="empty-msg">No upload dates set yet.<br>Add dates in the Batches tab.</div>`;
-  return cv.map(v => {
-    const s  = SS[v.status] || {};
-    const bi = state.batches.findIndex(b => b.id === v.batchId);
-    const bn = state.batches[bi]?.name || "";
-    const bc = BC[bi % BC.length] || "#888";
-    return `
-      <div class="cal-row" style="border-left-color:${s.border||"#ccc"}">
-        <div style="font-size:12px;font-weight:700;color:#185FA5">${v.uploadDate}</div>
-        <div style="font-size:13px;font-weight:600">${esc(v.title)||"(Untitled)"}</div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          ${badge(v.status)}
-          <span style="font-size:10px;font-weight:700;color:${bc};background:${bc}18;padding:2px 8px;border-radius:10px">${esc(bn)}</span>
-        </div>
-      </div>`;
+function renderCalendar(){
+  const cv=state.videos.filter(v=>v.uploadDate).sort((a,b)=>a.uploadDate.localeCompare(b.uploadDate));
+  if(!cv.length)return`<div class="empty-msg">No upload dates set yet.<br>Add dates in Batches tab.</div>`;
+  return cv.map(v=>{
+    const s=SS[v.status]||{};
+    const bi=state.batches.findIndex(b=>b.id===v.batchId);
+    const bn=state.batches[bi]?.name||"",bc=BC[bi%BC.length]||"#888";
+    return`<div class="cal-row" style="border-left-color:${s.border||"#555"}">
+      <div style="font-size:12px;font-weight:700;color:#4da6ff">${v.uploadDate}</div>
+      <div style="font-size:13px;font-weight:600">${esc(v.title)||"(Untitled)"}</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        ${badge(v.status)}
+        <span style="font-size:10px;font-weight:700;color:${bc};background:${bc}22;padding:2px 8px;border-radius:10px">${esc(bn)}</span>
+      </div>
+    </div>`;
   }).join("");
 }
 
-function renderPerf() {
-  if (!state.videos.length) return `<div class="empty-msg">No videos yet.</div>`;
-  return `
-    <div class="perf-scroll">
-      <table class="perf-table">
-        <thead><tr><th>Title</th><th>Status</th><th>Views</th><th>Likes</th><th>Notes</th></tr></thead>
-        <tbody>
-          ${state.videos.map(v => `
-            <tr>
-              <td style="font-weight:600;font-size:12px;max-width:120px">${esc(v.title)||"(Untitled)"}</td>
-              <td>${badge(v.status)}</td>
-              <td><input class="perf-input" value="${esc(v.views)}" placeholder="—"
-                onchange="updateVideoField(${v.id},'views',this.value)"/></td>
-              <td><input class="perf-input" value="${esc(v.likes)}" placeholder="—"
-                onchange="updateVideoField(${v.id},'likes',this.value)"/></td>
-              <td><input class="perf-input" value="${esc(v.notes)}" placeholder="—"
-                onchange="updateVideoField(${v.id},'notes',this.value)" style="width:110px"/></td>
-            </tr>`).join("")}
-        </tbody>
-      </table>
-    </div>`;
-}
-
-function renderViral() {
-  return `<div style="font-size:12px;font-weight:700;color:#D85A30;margin-bottom:12px">🔥 Trending Bangla finance topics – June 2026</div>` +
-  VIRAL.map((t,i) => `
-    <div class="viral-card" style="border-left-color:${t.color}">
-      <div class="viral-title">${t.title}</div>
-      <div class="viral-reason">${t.reason}</div>
-      <div class="viral-row">
-        <span style="font-size:10px;font-weight:700;padding:3px 10px;background:${t.bg};color:${t.color};border-radius:16px;border:1px solid ${t.color}">${t.tag}</span>
-        <button class="add-btn" style="background:${t.color};color:#fff;padding:6px 14px;font-size:12px"
-          onclick="addViralTopic(${i})">+ Add to pipeline</button>
+function renderIdeas(){
+  const IDEA_TAGS=["Script","Research","Concept","Trend","Collab","Other"];
+  const tagColors={"Script":"#7c6ff7","Research":"#4da6ff","Concept":"#2ecc8e","Trend":"#ff9f43","Collab":"#ff6b9d","Other":"#9999cc"};
+  return`
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--purple);margin-bottom:10px">💡 New Idea</div>
+      <input class="field" id="ideaTitle" placeholder="Idea title (e.g. 'কিভাবে DSE-তে শুরু করবেন?')"/>
+      <textarea class="field" id="ideaDetail" placeholder="Detail your idea — target audience, angle, key points, research needed…" style="margin-top:8px"></textarea>
+      <select class="field" id="ideaTag" style="margin-top:8px">
+        ${IDEA_TAGS.map(t=>`<option>${t}</option>`).join("")}
+      </select>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <button class="btn" style="background:var(--purple);color:#fff" onclick="addIdea()">💾 Save Idea</button>
       </div>
-    </div>`).join("");
+    </div>
+    ${state.ideas.length===0?`<div class="empty-msg">No ideas saved yet.<br>Write down your next video concept above!</div>`:""}
+    ${state.ideas.map(idea=>{
+      const col=tagColors[idea.tag]||"#9999cc";
+      return`<div class="card card-left" style="border-left-color:${col}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700;margin-bottom:4px">${esc(idea.title)}</div>
+            ${idea.detail?`<div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:8px">${esc(idea.detail)}</div>`:""}
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-size:10px;font-weight:700;padding:2px 10px;background:${col}22;color:${col};border-radius:12px;border:1px solid ${col}">${idea.tag}</span>
+              <span style="font-size:10px;color:var(--text3)">${idea.date}</span>
+            </div>
+          </div>
+          <button class="btn-del btn-sm" onclick="deleteIdea(${idea.id})">✕</button>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px">
+          <button class="btn btn-sm" style="background:var(--blue);color:#fff" onclick="addIdeaToPipeline(${idea.id})">→ Add to Pipeline</button>
+        </div>
+      </div>`;
+    }).join("")}`;
 }
 
-// ─── Email ────────────────────────────────────────────────────────────────────
-function buildEmailBody() {
-  let b = "BINIYOGLOGIC – Full Content Plan\n\n";
-  state.batches.forEach(batch => {
-    const bv = state.videos.filter(v => v.batchId === batch.id);
-    b += `━━━ ${batch.name} ━━━\n`;
-    if (!bv.length) b += "  No videos yet.\n";
-    bv.forEach((v,i) => {
-      b += `  ${i+1}. ${v.title||"(Untitled)"}\n     Status: ${v.status} | Script: ${v.script}%`;
-      if (v.uploadDate) b += ` | Upload: ${v.uploadDate}`;
-      if (v.views)      b += ` | Views: ${v.views}`;
-      if (v.notes)      b += `\n     Notes: ${v.notes}`;
-      b += "\n";
+function addIdeaToPipeline(id){
+  const idea=state.ideas.find(i=>i.id==id);
+  if(!idea)return;
+  state.videos.push({id:newId(),title:idea.title,status:"Idea",script:0,uploadDate:"",views:"",likes:"",notes:idea.detail,batchId:state.batches[0]?.id||"b1"});
+  state.tab="pipeline";save();render();
+  showToast("→ Added to Pipeline","info");
+}
+
+function renderBudget(){
+  const totalEst=state.budget.reduce((s,b)=>s+(+b.estimated||0),0);
+  const totalSpent=state.budget.reduce((s,b)=>s+(+b.spent||0),0);
+  const balance=totalEst-totalSpent;
+  const platColors={YouTube:"#ff6b6b",Facebook:"#4da6ff",Instagram:"#ff6b9d",TikTok:"#2ecc8e",LinkedIn:"#4da6ff",Other:"#9999cc"};
+  return`
+    <div class="budget-summary">
+      <div class="budget-stat" style="border-left-color:#4da6ff">
+        <div class="budget-stat-label" style="color:#4da6ff">Estimated</div>
+        <div class="budget-stat-value" style="color:#4da6ff">৳${fmt(totalEst)}</div>
+      </div>
+      <div class="budget-stat" style="border-left-color:#ff6b6b">
+        <div class="budget-stat-label" style="color:#ff6b6b">Spent</div>
+        <div class="budget-stat-value" style="color:#ff6b6b">৳${fmt(totalSpent)}</div>
+      </div>
+      <div class="budget-stat" style="border-left-color:${balance>=0?"#2ecc8e":"#ff6b6b"}">
+        <div class="budget-stat-label" style="color:${balance>=0?"#2ecc8e":"#ff6b6b"}">Balance</div>
+        <div class="budget-stat-value" style="color:${balance>=0?"#2ecc8e":"#ff6b6b"}">${balance>=0?"":"−"}৳${fmt(Math.abs(balance))}</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:#ffd32a;margin-bottom:10px">➕ Add Budget Entry</div>
+      <div class="field-row">
+        <select class="field" id="bPlatform">${PLATFORMS.map(p=>`<option>${p}</option>`).join("")}</select>
+        <input class="field" id="bProject" placeholder="Project / Campaign name"/>
+      </div>
+      <div class="field-row" style="margin-top:8px">
+        <input class="field" id="bDuration" placeholder="Duration (e.g. Jun 2026)"/>
+        <input class="field" type="number" id="bEstimated" placeholder="Estimated ৳"/>
+        <input class="field" type="number" id="bSpent" placeholder="Spent ৳"/>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <button class="btn" style="background:#ffd32a;color:#1a1a2e" onclick="addBudget()">💾 Add Entry</button>
+      </div>
+    </div>
+
+    ${state.budget.length===0?`<div class="empty-msg">No budget entries yet.<br>Add your first campaign above!</div>`:""}
+    ${state.budget.map(b=>{
+      const bal=(+b.estimated||0)-(+b.spent||0);
+      const col=platColors[b.platform]||"#9999cc";
+      const pct=b.estimated>0?Math.min(100,Math.round((+b.spent/+b.estimated)*100)):0;
+      return`<div class="budget-row">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <div>
+            <div style="font-size:14px;font-weight:700">${esc(b.project)}</div>
+            <div style="display:flex;gap:6px;margin-top:4px;align-items:center;flex-wrap:wrap">
+              <span style="font-size:10px;font-weight:700;padding:2px 8px;background:${col}22;color:${col};border-radius:10px;border:1px solid ${col}">${b.platform}</span>
+              ${b.duration?`<span style="font-size:10px;color:var(--text3)">📅 ${esc(b.duration)}</span>`:""}
+            </div>
+          </div>
+          <span class="balance-chip" style="background:${bal>=0?"#2ecc8e22":"#ff6b6b22"};color:${bal>=0?"#2ecc8e":"#ff6b6b"}">
+            ${bal>=0?"✓":"!"} ${bal>=0?"":"−"}৳${fmt(Math.abs(bal))}
+          </span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#4da6ff;font-weight:700;text-transform:uppercase;margin-bottom:4px">Estimated</div>
+            <input style="background:transparent;border:none;color:#4da6ff;font-size:16px;font-weight:700;width:100%;text-align:center;outline:none;font-family:inherit" value="${b.estimated}" onchange="updateBudgetField(${b.id},'estimated',this.value)" placeholder="0"/>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#ff6b6b;font-weight:700;text-transform:uppercase;margin-bottom:4px">Spent</div>
+            <input style="background:transparent;border:none;color:#ff6b6b;font-size:16px;font-weight:700;width:100%;text-align:center;outline:none;font-family:inherit" value="${b.spent}" onchange="updateBudgetField(${b.id},'spent',this.value)" placeholder="0"/>
+          </div>
+        </div>
+        <div class="progress-bar" style="margin-bottom:6px"><div class="progress-fill" style="width:${pct}%;background:${pct>100?"#ff6b6b":"#ffd32a"}"></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:var(--text3)">${pct}% of budget used</span>
+          <button class="btn-del btn-sm" onclick="deleteBudget(${b.id})">✕ Delete</button>
+        </div>
+      </div>`;
+    }).join("")}`;
+}
+
+function renderBudgetOnly(){
+  if(state.tab==="budget") document.getElementById("content").innerHTML=renderBudget();
+  renderMetrics();
+}
+
+function renderPerf(){
+  if(!state.videos.length)return`<div class="empty-msg">No videos yet.</div>`;
+  return`<div class="perf-scroll"><table class="perf-table">
+    <thead><tr><th>Title</th><th>Status</th><th>Views</th><th>Likes</th><th>Notes</th></tr></thead>
+    <tbody>${state.videos.map(v=>`<tr>
+      <td style="font-weight:600;font-size:12px">${esc(v.title)||"(Untitled)"}</td>
+      <td>${badge(v.status)}</td>
+      <td><input class="perf-input" value="${esc(v.views)}" placeholder="—" onchange="updateVideoField(${v.id},'views',this.value)"/></td>
+      <td><input class="perf-input" value="${esc(v.likes)}" placeholder="—" onchange="updateVideoField(${v.id},'likes',this.value)"/></td>
+      <td><input class="perf-input" value="${esc(v.notes)}" placeholder="—" onchange="updateVideoField(${v.id},'notes',this.value)" style="width:110px"/></td>
+    </tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+function renderViral(){
+  return`<div style="font-size:12px;font-weight:700;color:#ff9f43;margin-bottom:12px">🔥 Trending Bangla finance topics – June 2026</div>`+
+  VIRAL.map((t,i)=>`<div class="viral-card" style="border-left-color:${t.color}">
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px">${t.title}</div>
+    <div style="font-size:11px;color:var(--text2);font-style:italic;margin-bottom:8px">${t.reason}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+      <span style="font-size:10px;font-weight:700;padding:3px 10px;background:${t.color}22;color:${t.color};border-radius:16px;border:1px solid ${t.color}">${t.tag}</span>
+      <button class="btn btn-sm" style="background:${t.color};color:#1a1a2e" onclick="addViralTopic(${i})">+ Add to pipeline</button>
+    </div>
+  </div>`).join("");
+}
+
+// ── Email (Gmail API direct) ──────────────────────────────────────────────────
+function buildEmailBody(){
+  let b="BINIYOGLOGIC – Full Content Plan\n\n";
+  state.batches.forEach(batch=>{
+    const bv=state.videos.filter(v=>v.batchId===batch.id);
+    b+=`━━━ ${batch.name} ━━━\n`;
+    if(!bv.length)b+="  No videos yet.\n";
+    bv.forEach((v,i)=>{
+      b+=`  ${i+1}. ${v.title||"(Untitled)"}\n     Status: ${v.status} | Script: ${v.script}%`;
+      if(v.uploadDate)b+=` | Upload: ${v.uploadDate}`;
+      if(v.views)b+=` | Views: ${v.views}`;
+      if(v.notes)b+=`\n     Notes: ${v.notes}`;
+      b+="\n";
     });
-    b += "\n";
+    b+="\n";
   });
   return b;
 }
 
-async function sendEmail() {
-  const btn = document.querySelector(".send-btn");
-  btn.textContent = "Sending…"; btn.disabled = true;
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514", max_tokens: 1000,
-        mcp_servers: [{type:"url", url:"https://gmailmcp.googleapis.com/mcp/v1", name:"gmail-mcp"}],
-        messages: [{role:"user", content:`Send email via Gmail:\nTo: ${RECIPIENT}\nSubject: BINIYOGLOGIC Content Plan – ${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}\nBody:\n${buildEmailBody()}\nSend it now.`}],
-      }),
-    });
-    const data = await res.json();
-    const ok = data.content?.some(b => b.type==="text" && (b.text.toLowerCase().includes("sent")||b.text.toLowerCase().includes("success")));
-    alert(ok ? "✓ Email sent to team!" : "✓ Email dispatched successfully!");
-  } catch(e) {
-    alert("✗ Send failed. Check your connection.");
-  }
-  btn.textContent = "📧 Send Plan"; btn.disabled = false;
+function makeEmailRaw(to, subject, body) {
+  const email = [
+    `To: ${to}`,
+    `Subject: ${subject}`,
+    `MIME-Version: 1.0`,
+    `Content-Type: text/plain; charset=UTF-8`,
+    ``,
+    body
+  ].join("\r\n");
+  // Base64url encode
+  return btoa(unescape(encodeURIComponent(email)))
+    .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
 
-// ─── Main render ──────────────────────────────────────────────────────────────
-function setTab(id) { state.tab = id; render(); }
+async function sendEmail(){
+  const btn=document.querySelector(".send-btn");
+  btn.textContent="Sending…";btn.disabled=true;
+  showToast("Sending email…","info");
+  try{
+    // Step 1: Get OAuth token via Google Identity Services
+    const tokenResp = await new Promise((resolve, reject) => {
+      if(typeof google === "undefined"){
+        // Fallback: use mailto link
+        reject(new Error("no_gapi"));
+        return;
+      }
+      google.accounts.oauth2.initTokenClient({
+        client_id: "YOUR_CLIENT_ID", // placeholder — see note
+        scope: "https://www.googleapis.com/auth/gmail.send",
+        callback: resolve,
+      }).requestAccessToken();
+    });
 
-function render() {
+    const raw = makeEmailRaw(
+      RECIPIENT,
+      `BINIYOGLOGIC Content Plan – ${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}`,
+      buildEmailBody()
+    );
+
+    const res = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send",{
+      method:"POST",
+      headers:{"Authorization":`Bearer ${tokenResp.access_token}`,"Content-Type":"application/json"},
+      body: JSON.stringify({raw}),
+    });
+    if(res.ok){showToast("✓ Email sent to team!","ok");}
+    else{throw new Error("Gmail API error");}
+  } catch(e) {
+    // Fallback: open mailto
+    const subject=encodeURIComponent(`BINIYOGLOGIC Content Plan – ${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}`);
+    const body=encodeURIComponent(buildEmailBody());
+    window.open(`mailto:${RECIPIENT}?subject=${subject}&body=${body}`,"_blank");
+    showToast("✓ Mail app opened with plan","ok");
+  }
+  btn.textContent="📧 Send Plan";btn.disabled=false;
+}
+
+// ── Main ─────────────────────────────────────────────────────────────────────
+function setTab(id){state.tab=id;render();}
+
+function render(){
   renderMetrics();
   renderTabs();
   renderBottomNav();
-  const el = document.getElementById("content");
-  if      (state.tab === "pipeline") el.innerHTML = renderPipeline();
-  else if (state.tab === "batches")  el.innerHTML = renderBatches();
-  else if (state.tab === "calendar") el.innerHTML = renderCalendar();
-  else if (state.tab === "perf")     el.innerHTML = renderPerf();
-  else if (state.tab === "viral")    el.innerHTML = renderViral();
+  const el=document.getElementById("content");
+  if     (state.tab==="pipeline") el.innerHTML=renderPipeline();
+  else if(state.tab==="batches")  el.innerHTML=renderBatches();
+  else if(state.tab==="calendar") el.innerHTML=renderCalendar();
+  else if(state.tab==="ideas")    el.innerHTML=renderIdeas();
+  else if(state.tab==="budget")   el.innerHTML=renderBudget();
+  else if(state.tab==="perf")     el.innerHTML=renderPerf();
+  else if(state.tab==="viral")    el.innerHTML=renderViral();
 }
 
 loadState();
